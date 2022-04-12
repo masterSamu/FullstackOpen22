@@ -1,0 +1,5 @@
+title Muistiinpanon lisääminen Single-page
+
+Selain->Palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+Palvelin->Selain: Response 201 {"message":"note created"}
+note over Selain: uusi muistiinpano renderöidään listan jatkoksi
