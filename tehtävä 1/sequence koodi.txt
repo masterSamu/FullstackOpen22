@@ -1,0 +1,16 @@
+title Muistiinpanon lisääminen
+
+
+Selain->Palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over Selain: Sivun uudelleenlataus form lähetyksssä
+note over Palvelin: Palvelin tallentaa uuden muistiinpanon
+Selain->Palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+Palvelin->Selain: HTML puu
+Selain->Palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Palvelin->Selain: main.css
+Selain->Palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+Palvelin->Selain: main.js
+Selain->Palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+note over Palvelin: Data joka sisältää myös uuden muistiinpanon
+Palvelin->Selain: data.json
+note over Selain: Selain renderöi datan näytölle.
