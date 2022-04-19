@@ -1,21 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import AddPerson from "./components/AddPerson";
 import ShowPersons from "./components/ShowPersons";
 import FilterPersons from "./components/FilterPersons";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456" },
-    { name: "Ada Lovelace", number: "39-44-5323523" },
-    { name: "Dan Abramov", number: "12-43-234345" },
-    { name: "Mary Poppendieck", number: "39-23-6423122" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [personsToShow, setPersonsToShow] = useState(persons);
+  const [filterValue, setFilterValue] = useState("asd");
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const filteredPersons = persons.filter(
+      (person) =>
+        person.name.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1
+    );
+    setPersonsToShow(filteredPersons);
+  }, [filterValue, persons]);
+
+  useEffect(() => {
+    setPersonsToShow(persons);
+  }, [persons]);
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <FilterPersons persons={persons} setPersonsToShow={setPersonsToShow} />
+      <FilterPersons setFilterValue={setFilterValue} />
       <h2>Add new</h2>
       <AddPerson
         persons={persons}
@@ -24,7 +39,11 @@ const App = () => {
         setPersonsToShow={setPersonsToShow}
       />
       <h2>Numbers</h2>
-      <ShowPersons persons={personsToShow} />
+      {filterValue.length > 0 ? (
+        <ShowPersons persons={personsToShow} />
+      ) : (
+        <ShowPersons persons={persons} />
+      )}
     </div>
   );
 };
