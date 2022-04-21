@@ -28,5 +28,7 @@ const update = (newObject) => {
     return response.data;
   });
 };
-
-export default { getAll, create, deleteItem, update };
+const exportedObject = {
+    getAll, create, deleteItem, update
+}
+export default exportedObject;

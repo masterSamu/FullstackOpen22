@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import personService from "../services/persons";
 
-export default function AddPerson({ persons, setPersons }) {
+export default function AddPerson({
+  persons,
+  setPersons,
+  setNotificationMessage,
+  setErrorMessage,
+}) {
   const [newPerson, setNewPerson] = useState({ name: "", number: "" });
 
   const addPerson = (event) => {
@@ -16,6 +21,13 @@ export default function AddPerson({ persons, setPersons }) {
         number: newPerson.number,
       };
       personService.create(newNameObject).then((returnedPerson) => {
+        setNotificationMessage({
+          message: `Added ${returnedPerson.name}`,
+          type: "success",
+        });
+        setTimeout(() => {
+          setNotificationMessage({ message: null, type: null });
+        }, 3000);
         setPersons(persons.concat(returnedPerson));
         setNewPerson({ name: "", number: "" });
       });
@@ -29,14 +41,33 @@ export default function AddPerson({ persons, setPersons }) {
         );
         personObject.number = newPerson.number;
 
-        personService.update(personObject).then((returnedPerson) => {
-          setPersons(
-            persons.map((person) =>
-              person.id !== personObject.id ? person : returnedPerson
-            )
-          );
-          setNewPerson({ name: "", number: "" });
-        });
+        personService
+          .update(personObject)
+          .then((returnedPerson) => {
+            setNotificationMessage({
+              message: `Updated ${returnedPerson.name}`,
+              type: "success",
+            });
+            setTimeout(() => {
+              setNotificationMessage({ message: null, type: null });
+            }, 3000);
+            setPersons(
+              persons.map((person) =>
+                person.id !== personObject.id ? person : returnedPerson
+              )
+            );
+            setNewPerson({ name: "", number: "" });
+          })
+          .catch((error) => {
+            setNotificationMessage({
+              message: `Information of '${personObject.name}' was already removed from server`,
+              type: "error",
+            });
+            setTimeout(() => {
+              setNotificationMessage({ message: null, type: null });
+            }, 5000);
+            setPersons(persons.filter((item) => item.id !== personObject.id));
+          });
       }
     }
   };
