@@ -1,3 +1,9 @@
+# Tehtävät:
+kaikki maiden tiedot tehtävät:
+* 2.12-2.14
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
