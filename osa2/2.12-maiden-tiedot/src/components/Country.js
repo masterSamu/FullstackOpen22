@@ -15,11 +15,11 @@ export default function Country({ country, showSingleCountry }) {
     lat: country.capitalInfo.latlng[0],
     long: country.capitalInfo.latlng[1],
   };
-
+  const apiKey = process.env.REACT_APP_OPENWEATHERMAP_API_KEY;
   useEffect(() => {
     axios
       .get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${capital.lat}&lon=${capital.long}&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${capital.lat}&lon=${capital.long}&appid=${apiKey}&units=metric`
       )
       .then((response) => {
         setWeather(response.data);
