@@ -6,7 +6,6 @@ function App() {
   const [countries, setCountries] = useState([]);
   const [countriesToShow, setCountriesToShow] = useState([]);
   const [showSingleCountry, setShowSingleCountry] = useState(false);
-  console.log(process.env.REACT_APP_OPENWEATHERMAP_API_KEY)
 
   useEffect(() => {
     axios.get("https://restcountries.com/v3.1/all").then((response) => {
