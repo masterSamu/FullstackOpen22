@@ -1,3 +1,11 @@
+# Tehtävät:
+Kaikki puhelinluettelo tehtävät
+* 2.6-2.10
+* 2.11
+* 2.15-2.18
+* 2.19-2.20
+  
+  
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
