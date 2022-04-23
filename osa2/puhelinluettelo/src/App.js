@@ -56,7 +56,6 @@ const App = () => {
         person.name.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1
     );
   }
-  console.log(notificationMessage)
 
   return (
     <div>
