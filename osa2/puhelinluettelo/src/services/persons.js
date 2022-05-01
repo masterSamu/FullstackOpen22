@@ -10,25 +10,32 @@ const getAll = () => {
 
 const create = (newObject) => {
   const request = axios.post(baseURL, newObject);
-  return request.then((response) => {
-    return response.data;
-  });
+  return request
+    .then((response) => {
+      return response.data;
+    })
 };
 
 const deleteItem = (id) => {
   const request = axios.delete(`${baseURL}/${id}`);
-  return request.then(() => {
-    return "deleted";
-  });
+  return request
+    .then(() => {
+      return "deleted";
+    })
 };
 
 const update = (newObject) => {
   const request = axios.put(`${baseURL}/${newObject.id}`, newObject);
-  return request.then((response) => {
-    return response.data;
-  });
+  return request
+    .then((response) => {
+      return response.data;
+    })
 };
+
 const exportedObject = {
-    getAll, create, deleteItem, update
-}
+  getAll,
+  create,
+  deleteItem,
+  update,
+};
 export default exportedObject;

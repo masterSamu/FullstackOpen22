@@ -5,7 +5,6 @@ export default function AddPerson({
   persons,
   setPersons,
   setNotificationMessage,
-  setErrorMessage,
 }) {
   const [newPerson, setNewPerson] = useState({ name: "", number: "" });
 
@@ -20,17 +19,25 @@ export default function AddPerson({
         name: newPerson.name,
         number: newPerson.number,
       };
-      personService.create(newNameObject).then((returnedPerson) => {
-        setNotificationMessage({
-          message: `Added ${returnedPerson.name}`,
-          type: "success",
+      personService
+        .create(newNameObject)
+        .then((returnedPerson) => {
+          setNotificationMessage({
+            message: `Added ${returnedPerson.name}`,
+            type: "success",
+          });
+          setTimeout(() => {
+            setNotificationMessage({ message: null, type: null });
+          }, 3000);
+          setPersons(persons.concat(returnedPerson));
+          setNewPerson({ name: "", number: "" });
+        })
+        .catch((error) => {
+          setNotificationMessage({
+            message: error.response.data.error,
+            type: "error",
+          });
         });
-        setTimeout(() => {
-          setNotificationMessage({ message: null, type: null });
-        }, 3000);
-        setPersons(persons.concat(returnedPerson));
-        setNewPerson({ name: "", number: "" });
-      });
     } else {
       const confirmUpdatePerson = window.confirm(
         `${newPerson.name} is already added to phonebook, replace the old number with a new one?`
@@ -39,10 +46,9 @@ export default function AddPerson({
         const personObject = persons.find(
           (item) => item.name === newPerson.name
         );
-        personObject.number = newPerson.number;
 
         personService
-          .update(personObject)
+          .update({...personObject, number: newPerson.number})
           .then((returnedPerson) => {
             setNotificationMessage({
               message: `Updated ${returnedPerson.name}`,
@@ -56,17 +62,17 @@ export default function AddPerson({
                 person.id !== personObject.id ? person : returnedPerson
               )
             );
+
             setNewPerson({ name: "", number: "" });
           })
           .catch((error) => {
             setNotificationMessage({
-              message: `Information of '${personObject.name}' was already removed from server`,
+              message: error.response.data.error,
               type: "error",
             });
             setTimeout(() => {
               setNotificationMessage({ message: null, type: null });
             }, 5000);
-            setPersons(persons.filter((item) => item.id !== personObject.id));
           });
       }
     }
