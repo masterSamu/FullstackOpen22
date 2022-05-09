@@ -120,39 +120,42 @@ describe("most blogs", () => {
   });
 });
 
-
 describe("Most likes", () => {
-    const blogs = [
-        {
-          author: "Bruce Banner",
-          title: "Hulk is green",
-          url: "www.google.com",
-          likes: 5,
-        },
-        {
-          author: "Tony Stark",
-          title: "Iron Man is made from iron",
-          url: "www.google.com",
-          likes: 10,
-        },
-        {
-          author: "Steve Rogers",
-          title: "America miss his Captain",
-          url: "www.google.com",
-          likes: 5,
-        },
-        {
-          author: "Tony Stark",
-          title: "Iron Man returns",
-          url: "www.google.com",
-          likes: 15,
-        },
-      ];
+  const blogs = [
+    {
+      author: "Bruce Banner",
+      title: "Hulk is green",
+      url: "www.google.com",
+      likes: 5,
+    },
+    {
+      author: "Tony Stark",
+      title: "Iron Man is made from iron",
+      url: "www.google.com",
+      likes: 10,
+    },
+    {
+      author: "Steve Rogers",
+      title: "America miss his Captain",
+      url: "www.google.com",
+      likes: 5,
+    },
+    {
+      author: "Tony Stark",
+      title: "Iron Man returns",
+      url: "www.google.com",
+      likes: 15,
+    },
+  ];
 
-      
-    test("Blog with most likes", () => {
-        const result = listHelper.mostLikes(blogs);
-        const expectedResult = {author: "Tony Stark", blogs: 25}
-        expect(result).toEqual(expectedResult);
-    })
-})
+  test("Blog is empty, return 0", () => {
+    const result = listHelper.mostLikes([]);
+    expect(result).toBe(0);
+  });
+
+  test("Author with most likes", () => {
+    const result = listHelper.mostLikes(blogs);
+    const expectedResult = { author: "Tony Stark", likes: 25 };
+    expect(result).toEqual(expectedResult);
+  });
+});

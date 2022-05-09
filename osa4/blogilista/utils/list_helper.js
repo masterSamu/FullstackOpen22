@@ -28,32 +28,23 @@ const mostBlogs = (blogs) => {
   const author = Object.keys(result).find(
     (key) => result[key] === biggestBlogCount
   );
-
-  const mostBlogsObject = { author: author, blogs: biggestBlogCount };
-  return mostBlogsObject;
+  return { author: author, blogs: biggestBlogCount };
 };
 
 const mostLikes = (blogs) => {
+  if (blogs.length === 0) return 0;
+
   const result = blogs.reduce((a, b) => {
     a[b.author] = (a[b.author] || 0) + Number(b.likes);
     return a;
   }, {});
-  /*
-  const result = blogs.reduce(
-    (a, b) => a.set(b.author, (a.get(b.author) || 0) + Number(b.likes)),
-    new Map()
-  );
-  const obj = Object.fromEntries(result);
-  console.log(obj)*/
-  console.log(result);
+
   const values = Object.values(result);
   const biggestBlogCount = Math.max(...values);
   const author = Object.keys(result).find(
     (key) => result[key] === biggestBlogCount
   );
-  const mostBlogsObject = { author: author, blogs: biggestBlogCount };
-  console.log("RESULT:", mostBlogsObject);
-  return mostBlogsObject;
+  return { author: author, likes: biggestBlogCount };
 };
 
 module.exports = {
