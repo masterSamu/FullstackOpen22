@@ -20,13 +20,13 @@ describe("/api/blogs HTTP GET pyyntö", () => {
   });
 
   test("there is 2 blogs", async () => {
-    const response = await api.get("/api/blogs");
-    expect(response.body).toHaveLength(helper.initialBlogs.length);
+    const response = await helper.blogsInDb();
+    expect(response).toHaveLength(helper.initialBlogs.length);
   });
 
   test("Blogs have identifier field called 'id'", async () => {
-    const response = await api.get("/api/blogs");
-    response.body.forEach((blog) => {
+    const response = await helper.blogsInDb();
+    response.forEach((blog) => {
       expect(blog.id).toBeDefined();
     });
   });
@@ -46,10 +46,10 @@ describe("/api/blogs HTTP POST pyyntö", () => {
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
-    const blogsAtEnd = await api.get("/api/blogs");
-    expect(blogsAtEnd.body).toHaveLength(helper.initialBlogs.length + 1);
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
 
-    expect(blogsAtEnd.body[helper.initialBlogs.length].title).toContain(
+    expect(blogsAtEnd[helper.initialBlogs.length].title).toContain(
       newBlog.title
     );
   });
@@ -68,17 +68,48 @@ describe("/api/blogs HTTP POST pyyntö", () => {
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
-    const blogsAtEnd = await api.get("/api/blogs");
-    expect(blogsAtEnd.body).toHaveLength(helper.initialBlogs.length + 1);
-    expect(blogsAtEnd.body[helper.initialBlogs.length].likes).toBe(0);
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+    expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0);
   });
 
   test("Blog without title and url gets response status 400", async () => {
     const blogWithoutTitleAndUrl = { author: "Tony Stark", likes: 4 };
     await api.post("/api/blogs").send(blogWithoutTitleAndUrl).expect(400);
 
-    const blogsAtEnd = await api.get("/api/blogs");
-    expect(blogsAtEnd.body).toHaveLength(helper.initialBlogs.length);
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
+});
+
+describe("/api/blogs HTTP DELETE pyyntö", () => {
+  test("Delete one blog", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+    const blog = blogsAtEnd.map((b) => b.title);
+    expect(blog).not.toContain(blogToDelete.title);
+  });
+});
+
+describe("/api/blogs HTTP PUT pyyntö", () => {
+  test("Update likes for blog", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const newBlog = blogsAtStart[0];
+    newBlog.likes = newBlog.likes + 1;
+
+    await api
+      .put(`/api/blogs/${newBlog.id}`)
+      .send(newBlog)
+      .expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    const blog = blogsAtEnd.find((blog) => blog.id === newBlog.id);
+    expect(blog.likes).toBe(11);
   });
 });
 
