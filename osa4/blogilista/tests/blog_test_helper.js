@@ -17,7 +17,7 @@ const initialBlogs = [
 ];
 
 const blogsInDb = async () => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
   return blogs.map((blog) => blog.toJSON());
 };
 
@@ -25,6 +25,7 @@ const usersInDb = async () => {
   const users = await User.find({});
   return users.map((map) => map.toJSON());
 };
+
 
 module.exports = {
   initialBlogs,
