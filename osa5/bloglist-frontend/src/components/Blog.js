@@ -27,18 +27,21 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
 
   return (
     <div style={blogStyle}>
-      <span style={titleStyle}>{blog.title}</span>
+      <span style={titleStyle}>
+        {blog.title} {blog.author}
+      </span>
       <button onClick={() => setExpanded(!isExpanded)}>{buttonText}</button>
-      <div style={styleWhenExpanded}>
-        <div>Author: {blog.author}</div>
-        <div>Url: {blog.url}</div>
-        <div>
-          Likes: {blog.likes}
-          <button onClick={handleLike}>like</button>
+      {isExpanded && (
+        <div style={styleWhenExpanded}>
+          <div>Url: {blog.url}</div>
+          <div>
+            Likes: {blog.likes}
+            <button onClick={handleLike} data-testid="likeButton">like</button>
+          </div>
+          <div>User: {blog.user.name}</div>
+          <button onClick={handleDelete}>Remove</button>
         </div>
-        <div>User: {blog.user.name}</div>
-        <button onClick={handleDelete}>Remove</button>
-      </div>
+      )}
     </div>
   );
 };

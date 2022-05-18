@@ -26,6 +26,7 @@ export default function AddBlogForm({ createBlog }) {
         <input
           value={title}
           onChange={({ target }) => setTitle(target.value)}
+          placeholder="Title"
         />
       </div>
       <div>
@@ -33,11 +34,16 @@ export default function AddBlogForm({ createBlog }) {
         <input
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
+          placeholder="Author"
         />
       </div>
       <div>
         url:
-        <input value={url} onChange={({ target }) => setUrl(target.value)} />
+        <input
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+          placeholder="Url"
+        />
       </div>
       <button type="submit">Create</button>
     </form>
