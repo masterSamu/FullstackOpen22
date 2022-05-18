@@ -1,9 +1,9 @@
-import React from "react";
 import { useState } from "react";
+import PropTypes from "prop-types";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 
-export default function LoginForm({setUser, setNotification}) {
+export default function LoginForm({ setUser, setNotification }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,12 +20,12 @@ export default function LoginForm({setUser, setNotification}) {
       setUsername("");
       setPassword("");
     } catch (error) {
-      setNotification({type: "error", message: error.message});
+      setNotification({ type: "error", message: error.message });
       setTimeout(() => {
-        setNotification(null)
+        setNotification(null);
       }, 5000);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleLogin}>
@@ -51,3 +51,7 @@ export default function LoginForm({setUser, setNotification}) {
     </form>
   );
 }
+
+LoginForm.propTypes = {
+  setUser: PropTypes.func.isRequired,
+};

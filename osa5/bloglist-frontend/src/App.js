@@ -73,12 +73,12 @@ const App = () => {
       setNotification(null);
     }, 6000);
   };
-  
+
   const deleteBlog = async (blogToDelete) => {
     try {
       const response = await blogService.deleteItem(blogToDelete.id);
       if (response === "deleted") {
-        setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id));
+        setBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id));
         setNotification({
           type: "success",
           message: `${blogToDelete.title} deleted`,
@@ -90,7 +90,7 @@ const App = () => {
     setTimeout(() => {
       setNotification(null);
     }, 6000);
-  }
+  };
 
   return (
     <div>

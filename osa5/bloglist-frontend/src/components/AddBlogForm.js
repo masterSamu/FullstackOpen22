@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import blogService from "../services/blogs";
+import PropTypes from "prop-types";
 
 export default function AddBlogForm({ createBlog }) {
   const [title, setTitle] = useState("");
@@ -12,7 +12,7 @@ export default function AddBlogForm({ createBlog }) {
     createBlog({
       title: title,
       author: author,
-      url: url
+      url: url,
     });
     setTitle("");
     setAuthor("");
@@ -23,11 +23,17 @@ export default function AddBlogForm({ createBlog }) {
     <form onSubmit={addBlog}>
       <div>
         title:
-        <input value={title} onChange={({ target }) => setTitle(target.value)} />
+        <input
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+        />
       </div>
       <div>
         author:
-        <input value={author} onChange={({ target }) => setAuthor(target.value)} />
+        <input
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
       </div>
       <div>
         url:
@@ -37,3 +43,7 @@ export default function AddBlogForm({ createBlog }) {
     </form>
   );
 }
+
+AddBlogForm.propTypes = {
+  createBlog: PropTypes.func.isRequired,
+};

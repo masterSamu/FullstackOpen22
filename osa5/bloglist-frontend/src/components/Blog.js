@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const [isExpanded, setExpanded] = useState(false);
@@ -40,6 +41,12 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
       </div>
     </div>
   );
+};
+
+Blog.propTypes = {
+  blog: PropTypes.object,
+  updateBlog: PropTypes.func,
+  deleteBlog: PropTypes.func,
 };
 
 export default Blog;
