@@ -15,10 +15,12 @@ describe("Blog component tests", () => {
   const deleteBlog = jest.fn();
   const updateBlog = jest.fn();
   beforeEach(() => {
-    render(<Blog blog={blog} deleteBlog={deleteBlog} updateBlog={updateBlog} />);
+    render(
+      <Blog blog={blog} deleteBlog={deleteBlog} updateBlog={updateBlog} />
+    );
   });
 
-  test("Component renders title and author, but not likes and url ", () => {
+  test("Component renders title and author, but not likes and url", () => {
     const element = screen.getByText(`${blog.title} ${blog.author}`);
     expect(element).toBeDefined();
 
@@ -56,5 +58,4 @@ describe("Blog component tests", () => {
 
     expect(updateBlog.mock.calls).toHaveLength(2);
   });
-
 });

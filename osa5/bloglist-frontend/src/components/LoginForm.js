@@ -47,7 +47,7 @@ export default function LoginForm({ setUser, setNotification }) {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button type="submit" id="login-button">login</button>
     </form>
   );
 }
