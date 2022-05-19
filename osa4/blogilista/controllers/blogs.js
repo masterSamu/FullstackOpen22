@@ -3,6 +3,7 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { userExtractor } = require("../utils/middleware");
+const { update } = require("../models/blog");
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
@@ -60,12 +61,13 @@ blogsRouter.put("/:id", async (request, response) => {
     author: body.author,
     likes: body.likes,
     url: body.url,
+    user: body.user,
   };
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, newBlog, {
     new: true,
-  });
-  response.status(204).json(updatedBlog);
+  }).populate("user", { username: 1, name: 1 });
+  response.status(200).json(updatedBlog);
 });
 
 module.exports = blogsRouter;
