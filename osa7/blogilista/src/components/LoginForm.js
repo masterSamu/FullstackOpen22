@@ -1,28 +1,27 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import loginService from "../services/login";
-import blogService from "../services/blogs";
+import { logInUser } from "../reducers/userReducer";
+import { setNotification } from "../reducers/notificationReducer";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function LoginForm({ setUser, setNotification }) {
+export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-      window.localStorage.setItem("loggedBloglistUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
+      dispatch(logInUser({ username, password }));
+      if (user) {
+        setUsername("");
+        setPassword("");
+      }
     } catch (error) {
-      setNotification({ type: "error", message: error.message });
+      dispatch(setNotification({ type: "error", message: error.message }));
       setTimeout(() => {
-        setNotification(null);
+        dispatch(setNotification(null));
       }, 5000);
     }
   };

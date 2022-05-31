@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
@@ -8,15 +8,18 @@ import Togglable from "./components/Togglable";
 import "./styles/App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
+import { setUser, logOutUser } from "./reducers/userReducer";
 import {
   createBlog,
   initializeBlogs,
   removeBlog,
   updateBlog,
 } from "./reducers/blogReducer";
+import { Routes, Route } from "react-router-dom";
+import Users from "./components/Users";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
   const blogFormRef = useRef();
 
   const dispatch = useDispatch();
@@ -30,15 +33,14 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBloglistUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const userFromLocalStorage = JSON.parse(loggedUserJSON);
+      dispatch(setUser(userFromLocalStorage));
+      blogService.setToken(userFromLocalStorage.token);
     }
-  }, []);
+  }, [dispatch]);
 
   const logOut = () => {
-    window.localStorage.removeItem("loggedBloglistUser");
-    setUser(null);
+    dispatch(logOutUser());
   };
 
   const addBlog = async (blogObject) => {
@@ -92,7 +94,6 @@ const App = () => {
       dispatch(setNotification(null));
     }, 6000);
   };
-
   return (
     <div>
       {notification !== null && (
@@ -115,18 +116,29 @@ const App = () => {
           <p>
             {user.name} logged in <button onClick={logOut}>logout</button>
           </p>
-          <h3>Add new blog</h3>
-          <Togglable buttonLabel="Create" ref={blogFormRef}>
-            <AddBlogForm createBlog={addBlog} />
-          </Togglable>
-          {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateBlog={likeBlog}
-              deleteBlog={deleteBlog}
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <h3>Add new blog</h3>
+                  <Togglable buttonLabel="Create" ref={blogFormRef}>
+                    <AddBlogForm createBlog={addBlog} />
+                  </Togglable>
+                  {blogs.map((blog) => (
+                    <Blog
+                      key={blog.id}
+                      blog={blog}
+                      updateBlog={likeBlog}
+                      deleteBlog={deleteBlog}
+                    />
+                  ))}
+                </>
+              }
             />
-          ))}
+
+            <Route path="/users" element={<Users />} />
+          </Routes>
         </div>
       )}
     </div>
