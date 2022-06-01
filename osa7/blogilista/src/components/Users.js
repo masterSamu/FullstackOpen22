@@ -1,18 +1,19 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Users = () => {
-  const dispatch = useDispatch();
   const blogsPerUser = useSelector((state) =>
     state.blogs.reduce((distinctUsers, blog) => {
       const username = blog.user.username;
+      const id = blog.user.id;
+
       if (distinctUsers.length === 0) {
-        const object = { username, count: 1 };
+        const object = { username, id, count: 1 };
         distinctUsers.push(object);
       } else {
         const user = distinctUsers.find((user) => user.username === username);
-        console.log(user, username);
-        if (user !== undefined) {
+        if (user) {
           if (user.username === username) {
             user.count = user.count + 1;
             return distinctUsers.filter((u) =>
@@ -20,7 +21,7 @@ const Users = () => {
             );
           }
         } else {
-          const object = { username, count: 1 };
+          const object = { username, id, count: 1 };
           distinctUsers.push(object);
         }
       }
@@ -40,8 +41,10 @@ const Users = () => {
       <tbody>
         {blogsPerUser.map((user) => {
           return (
-            <tr key={user.username}>
-              <td>{user.username}</td>
+            <tr key={user.id}>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.username}</Link>
+              </td>
               <td> {user.count}</td>
             </tr>
           );

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { logInUser } from "../reducers/userReducer";
-import { setNotification } from "../reducers/notificationReducer";
+import { createNotification } from "../reducers/notificationReducer";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function LoginForm() {
@@ -19,10 +19,7 @@ export default function LoginForm() {
         setPassword("");
       }
     } catch (error) {
-      dispatch(setNotification({ type: "error", message: error.message }));
-      setTimeout(() => {
-        dispatch(setNotification(null));
-      }, 5000);
+      dispatch(createNotification({ type: "error", message: error.message }, 5000));
     }
   };
 

@@ -4,6 +4,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { userExtractor } = require("../utils/middleware");
 const { update } = require("../models/blog");
+const { request } = require("express");
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
@@ -68,6 +69,25 @@ blogsRouter.put("/:id", async (request, response) => {
     new: true,
   }).populate("user", { username: 1, name: 1 });
   response.status(200).json(updatedBlog);
+});
+
+console.log("POSTING");
+blogsRouter.post("/:id/comments", async (request, response) => {
+  const id = request.params.id;
+  const blog = await Blog.findById(id);
+
+  if (blog) {
+    if (blog.comments.length === 0) blog.comments = [];
+    const comment = request.body.comment;
+    const commentId = new Date().getTime();
+    const commentObject = { comment, id: commentId };
+    blog.comments.push(commentObject);
+    const updatedBlog = await Blog.findByIdAndUpdate(id, blog, {
+      new: true,
+    }).populate("user", { username: 1, name: 1 });
+    if (updatedBlog) return response.status(200).json(updatedBlog);
+  }
+  return response.status(400).json({ error: "error" }).end();
 });
 
 module.exports = blogsRouter;

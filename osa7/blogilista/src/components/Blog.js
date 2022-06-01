@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const [isExpanded, setExpanded] = useState(false);
@@ -28,7 +29,7 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
   return (
     <div style={blogStyle} className="blog">
       <span style={titleStyle}>
-        {blog.title} {blog.author}
+        <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
       </span>
       <button onClick={() => setExpanded(!isExpanded)}>{buttonText}</button>
       {isExpanded && (

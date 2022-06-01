@@ -7,7 +7,7 @@ import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import "./styles/App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { setNotification } from "./reducers/notificationReducer";
+import { createNotification } from "./reducers/notificationReducer";
 import { setUser, logOutUser } from "./reducers/userReducer";
 import {
   createBlog,
@@ -17,6 +17,9 @@ import {
 } from "./reducers/blogReducer";
 import { Routes, Route } from "react-router-dom";
 import Users from "./components/Users";
+import BlogsFromUser from "./components/BlogsFromUser";
+import BlogView from "./components/BlogView";
+import NavigationBar from "./components/NavigationBar";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -48,51 +51,57 @@ const App = () => {
     try {
       dispatch(createBlog(blogObject));
       dispatch(
-        setNotification({
-          type: "success",
-          message: `New record "${blogObject.title}" by ${blogObject.author} saved.`,
-        })
+        createNotification(
+          {
+            type: "success",
+            message: `New record "${blogObject.title}" by ${blogObject.author} saved.`,
+          },
+          5000
+        )
       );
     } catch (error) {
-      dispatch(setNotification({ type: "error", message: error.message }));
+      dispatch(
+        createNotification({ type: "error", message: error.message }, 5000)
+      );
     }
-    setTimeout(() => {
-      dispatch(setNotification(null));
-    }, 6000);
   };
 
   const likeBlog = async (id, newBlogObject) => {
     try {
       dispatch(updateBlog(id, newBlogObject));
       dispatch(
-        setNotification({
-          type: "success",
-          message: `${newBlogObject.title} updated`,
-        })
+        createNotification(
+          {
+            type: "success",
+            message: `${newBlogObject.title} updated`,
+          },
+          5000
+        )
       );
     } catch (error) {
-      dispatch(setNotification({ type: "error", message: error.message }));
+      dispatch(
+        createNotification({ type: "error", message: error.message }, 5000)
+      );
     }
-    setTimeout(() => {
-      dispatch(setNotification(null));
-    }, 6000);
   };
 
   const deleteBlog = async (blogToDelete) => {
     try {
       dispatch(removeBlog(blogToDelete.id));
       dispatch(
-        setNotification({
-          type: "success",
-          message: `${blogToDelete.title} deleted`,
-        })
+        createNotification(
+          {
+            type: "success",
+            message: `${blogToDelete.title} deleted`,
+          },
+          5000
+        )
       );
     } catch (error) {
-      dispatch(setNotification({ type: "error", message: error.message }));
+      dispatch(
+        createNotification({ type: "error", message: error.message }, 5000)
+      );
     }
-    setTimeout(() => {
-      dispatch(setNotification(null));
-    }, 6000);
   };
   return (
     <div>
@@ -107,15 +116,13 @@ const App = () => {
         <div>
           <h2>Log in to application</h2>
           <Togglable buttonLabel="login">
-            <LoginForm setUser={setUser} setNotification={setNotification} />
+            <LoginForm setUser={setUser} />
           </Togglable>
         </div>
       ) : (
         <div>
+          <NavigationBar user={user} logOut={logOut} />
           <h2>blogs</h2>
-          <p>
-            {user.name} logged in <button onClick={logOut}>logout</button>
-          </p>
           <Routes>
             <Route
               path="/"
@@ -138,6 +145,8 @@ const App = () => {
             />
 
             <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<BlogsFromUser />} />
+            <Route path="/blogs/:id" element={<BlogView />} />
           </Routes>
         </div>
       )}

@@ -17,3 +17,11 @@
   color: green;
   border-color: green;
 }
+
+.navigation {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1em;
+  background-color: seashell;
+  padding: 10px 0px;
+}
