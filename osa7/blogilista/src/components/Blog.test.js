@@ -3,6 +3,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
+import { MemoryRouter } from "react-router-dom";
 
 describe("Blog component tests", () => {
   const blog = {
@@ -16,7 +17,8 @@ describe("Blog component tests", () => {
   const updateBlog = jest.fn();
   beforeEach(() => {
     render(
-      <Blog blog={blog} deleteBlog={deleteBlog} updateBlog={updateBlog} />
+      <Blog blog={blog} deleteBlog={deleteBlog} updateBlog={updateBlog} />,
+      { wrapper: MemoryRouter }
     );
   });
 

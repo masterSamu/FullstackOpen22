@@ -35,14 +35,12 @@ export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogServices.getAll();
     dispatch(setBlogsReducer(blogs.sort((a, b) => b.likes - a.likes)));
-    console.log("initializing");
   };
 };
 
 export const createBlog = (blogObject) => {
   return async (dispatch) => {
     const newBlog = await blogServices.create(blogObject);
-    console.log(newBlog);
     dispatch(appendBlogsReducer(newBlog));
   };
 };
@@ -60,5 +58,13 @@ export const updateBlog = (id, blog) => {
     if (updatedBlog) dispatch(setBlogReducer(updatedBlog));
   };
 };
+
+export const addCommentToBlog = (id, comment) => {
+  return async dispatch => {
+    const commentedBlog = await blogServices.commentBlog(id, comment);
+    if (commentedBlog) dispatch(setBlogReducer(commentedBlog));
+  }
+}
+
 
 export default blogSlice.reducer;

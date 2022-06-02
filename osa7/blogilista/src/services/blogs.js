@@ -35,4 +35,9 @@ const deleteItem = async (id) => {
   if (response.status === 204) return "deleted";
 };
 
-export default { getAll, create, setToken, update, deleteItem };
+const commentBlog = async (id, comment) => {
+  const response = await axios.post(`${baseUrl}/${id}/comments`, comment);
+  return response.data;
+}
+
+export default { getAll, create, setToken, update, deleteItem, commentBlog };

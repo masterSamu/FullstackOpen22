@@ -3,11 +3,12 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AddBlogForm from "./AddBlogForm";
+import { MemoryRouter } from "react-router-dom";
 
 describe("AddBlogForm component tests", () => {
   const createBlog = jest.fn();
   beforeEach(() => {
-    render(<AddBlogForm createBlog={createBlog} />);
+    render(<AddBlogForm createBlog={createBlog} />, { wrapper: MemoryRouter });
   });
 
   test("createBlog function has the correct values when submit", async () => {

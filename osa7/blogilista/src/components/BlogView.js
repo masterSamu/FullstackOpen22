@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { updateBlog } from "../reducers/blogReducer";
+import { addCommentToBlog, updateBlog } from "../reducers/blogReducer";
 import { createNotification } from "../reducers/notificationReducer";
+import Comments from "./Comments";
 
 const BlogView = () => {
   const id = useParams().id;
@@ -19,13 +20,34 @@ const BlogView = () => {
       likes: blog.likes + 1,
       url: blog.url,
       user: blog.user.id,
+      comments: blog.comments,
     };
     try {
-        dispatch(updateBlog(id, newBlog));
-        const message = `You liked "${newBlog.title}"`
-        dispatch(createNotification({type: "success", message}, 5000))
+      dispatch(updateBlog(id, newBlog));
+      const message = `You liked "${newBlog.title}"`;
+      dispatch(createNotification({ type: "success", message }, 5000));
     } catch (error) {
-        dispatch(createNotification({type: "error", message: error.message, time: 5000}))
+      dispatch(
+        createNotification({
+          type: "error",
+          message: error.message,
+        }, 5000)
+      );
+    }
+  };
+
+  const addComment = async (comment) => {
+    try {
+      dispatch(addCommentToBlog(blog.id, comment));
+      const message = `Your comment is saved to "${blog.title}"`;
+      dispatch(createNotification({ type: "success", message }, 5000));
+    } catch (error) {
+      dispatch(
+        createNotification({
+          type: "error",
+          message: error.message,
+        }, 5000)
+      );
     }
   };
 
@@ -39,13 +61,7 @@ const BlogView = () => {
         {blog.likes} <button onClick={handleLike}>Like</button>
       </p>
       <p>Added by {blog.author}</p>
-      <ul>
-        {blog.comments.map(comment => {
-          return (
-            <li key={comment.id}>{comment.comment}</li>
-          )
-        })}
-      </ul>
+      <Comments comments={blog.comments} addComment={addComment} />
     </div>
   );
 };
