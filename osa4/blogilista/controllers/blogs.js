@@ -71,7 +71,6 @@ blogsRouter.put("/:id", async (request, response) => {
   response.status(200).json(updatedBlog);
 });
 
-console.log("POSTING");
 blogsRouter.post("/:id/comments", async (request, response) => {
   const id = request.params.id;
   const blog = await Blog.findById(id);

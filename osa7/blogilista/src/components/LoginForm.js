@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { logInUser } from "../reducers/userReducer";
 import { createNotification } from "../reducers/notificationReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { InputLabel, TextField, Button } from "@mui/material";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
@@ -12,40 +13,40 @@ export default function LoginForm() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      dispatch(logInUser({ username, password }));
-      if (user) {
-        setUsername("");
-        setPassword("");
-      }
-    } catch (error) {
-      dispatch(createNotification({ type: "error", message: error.message }, 5000));
+    dispatch(logInUser({ username, password }));
+    if (user) {
+      setUsername("");
+      setPassword("");
     }
   };
 
   return (
     <form onSubmit={handleLogin}>
       <div>
-        username
-        <input
+        <InputLabel htmlFor="username">username</InputLabel>
+        <TextField
+          variant="outlined"
           type="text"
           value={username}
           name="Username"
+          id="username"
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
-        password
-        <input
+        <InputLabel htmlFor="password">password</InputLabel>
+        <TextField
+          variant="outlined"
           type="password"
           value={password}
           name="Password"
+          id="password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit" id="login-button">
+      <Button variant="contained" type="submit" id="login-button">
         login
-      </button>
+      </Button>
     </form>
   );
 }

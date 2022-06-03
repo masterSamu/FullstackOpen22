@@ -18,10 +18,14 @@
   border-color: green;
 }
 
-.navigation {
+form {
+  margin: 10px 0px;
   display: flex;
   justify-content: flex-start;
-  gap: 1em;
-  background-color: seashell;
-  padding: 10px 0px;
+  flex-direction: row;
+  gap: 10px;
+}
+
+button[type="submit"] {
+  align-self: center;
 }

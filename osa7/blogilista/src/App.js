@@ -1,4 +1,11 @@
 import { useEffect, useRef } from "react";
+import {
+  Container,
+  TableContainer,
+  Paper,
+  Table,
+  TableBody,
+} from "@mui/material";
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
@@ -86,34 +93,17 @@ const App = () => {
   };
 
   const deleteBlog = async (blogToDelete) => {
-    try {
-      dispatch(removeBlog(blogToDelete.id));
-      dispatch(
-        createNotification(
-          {
-            type: "success",
-            message: `${blogToDelete.title} deleted`,
-          },
-          5000
-        )
-      );
-    } catch (error) {
-      dispatch(
-        createNotification({ type: "error", message: error.message }, 5000)
-      );
-    }
+    dispatch(removeBlog(blogToDelete));
   };
-  return (
-    <div>
-      {notification !== null && (
-        <Notification
-          type={notification?.type}
-          message={notification?.message}
-        />
-      )}
 
+  return (
+    <Container>
       {user === null ? (
         <div>
+          <Notification
+            type={notification?.type}
+            message={notification?.message}
+          />
           <h2>Log in to application</h2>
           <Togglable buttonLabel="login">
             <LoginForm setUser={setUser} />
@@ -122,6 +112,10 @@ const App = () => {
       ) : (
         <div>
           <NavigationBar user={user} logOut={logOut} />
+          <Notification
+            type={notification?.type}
+            message={notification?.message}
+          />
           <h2>blogs</h2>
           <Routes>
             <Route
@@ -132,25 +126,33 @@ const App = () => {
                   <Togglable buttonLabel="Create" ref={blogFormRef}>
                     <AddBlogForm createBlog={addBlog} />
                   </Togglable>
-                  {blogs.map((blog) => (
-                    <Blog
-                      key={blog.id}
-                      blog={blog}
-                      updateBlog={likeBlog}
-                      deleteBlog={deleteBlog}
-                    />
-                  ))}
+                  <TableContainer component={Paper}>
+                    <Table aria-label="blog table">
+                      <TableBody>
+                        {blogs.map((blog) => (
+                          <Blog
+                            key={blog.id}
+                            blog={blog}
+                            updateBlog={likeBlog}
+                          />
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </>
               }
             />
 
             <Route path="/users" element={<Users />} />
             <Route path="/users/:id" element={<BlogsFromUser />} />
-            <Route path="/blogs/:id" element={<BlogView />} />
+            <Route
+              path="/blogs/:id"
+              element={<BlogView deleteBlog={deleteBlog} />}
+            />
           </Routes>
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 

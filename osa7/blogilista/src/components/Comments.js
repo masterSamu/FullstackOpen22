@@ -1,3 +1,5 @@
+import { Button, List, ListItem, TextField } from "@mui/material";
+
 const CommentForm = ({ addComment }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -8,8 +10,10 @@ const CommentForm = ({ addComment }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="comment" />
-      <button type="submit">Add comment</button>
+      <TextField variant="standard" name="comment" />
+      <Button variant="contained" type="submit">
+        Add comment
+      </Button>
     </form>
   );
 };
@@ -20,12 +24,16 @@ const Comments = ({ comments, addComment }) => {
   return (
     <div>
       <CommentForm addComment={addComment} />
-      {comments.length === 0 && <p><i>Be first to comment this blog</i></p>}
-      <ul>
+      {comments.length === 0 && (
+        <p>
+          <i>Be first to comment this blog</i>
+        </p>
+      )}
+      <List>
         {comments.map((comment) => {
-          return <li key={comment.id}>{comment.comment}</li>;
+          return <ListItem key={comment.id}>{comment.comment}</ListItem>;
         })}
-      </ul>
+      </List>
     </div>
   );
 };

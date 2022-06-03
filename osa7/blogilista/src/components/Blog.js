@@ -1,13 +1,9 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { TableRow, TableCell, Button } from "@mui/material";
+import { ThumbUp } from "@mui/icons-material";
 
-const Blog = ({ blog, updateBlog, deleteBlog }) => {
-  const [isExpanded, setExpanded] = useState(false);
-
-  const styleWhenExpanded = { display: isExpanded ? "" : "none" };
-  const buttonText = isExpanded ? "Hide" : "Expand";
-
+const Blog = ({ blog, updateBlog }) => {
   const handleLike = () => {
     const newBlog = {
       title: blog.title,
@@ -19,33 +15,20 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
     updateBlog(blog.id, newBlog);
   };
 
-  const handleDelete = () => {
-    const confirm = window.confirm(
-      `Remove blog ${blog.title} by ${blog.author}`
-    );
-    if (confirm) deleteBlog(blog);
-  };
-
   return (
-    <div style={blogStyle} className="blog">
-      <span style={titleStyle}>
-        <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-      </span>
-      <button onClick={() => setExpanded(!isExpanded)}>{buttonText}</button>
-      {isExpanded && (
-        <div style={styleWhenExpanded}>
-          <div>Url: {blog.url}</div>
-          <div>
-            Likes: {blog.likes}
-            <button onClick={handleLike} data-testid="likeButton">
-              like
-            </button>
-          </div>
-          <div>User: {blog.user.name}</div>
-          <button onClick={handleDelete}>Remove</button>
-        </div>
-      )}
-    </div>
+    <TableRow style={blogStyle} className="blog">
+      <TableCell>
+        <span style={titleStyle}>
+          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+        </span>
+      </TableCell>
+      <TableCell>{blog.author}</TableCell>
+      <TableCell>
+        <Button onClick={handleLike} startIcon={<ThumbUp />}>
+          Like
+        </Button>
+      </TableCell>
+    </TableRow>
   );
 };
 

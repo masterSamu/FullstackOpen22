@@ -1,10 +1,13 @@
+import { Button } from "@mui/material";
+import { ThumbUp } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { addCommentToBlog, updateBlog } from "../reducers/blogReducer";
 import { createNotification } from "../reducers/notificationReducer";
 import Comments from "./Comments";
+import { useState } from "react";
 
-const BlogView = () => {
+const BlogView = ({ deleteBlog }) => {
   const id = useParams().id;
   const blog = useSelector((state) =>
     state.blogs.find((blog) => blog.id === id)
@@ -12,6 +15,10 @@ const BlogView = () => {
   const dispatch = useDispatch();
 
   if (!blog) return null;
+
+  const handleDelete = () => {
+    deleteBlog(blog);
+  };
 
   const handleLike = () => {
     const newBlog = {
@@ -28,10 +35,13 @@ const BlogView = () => {
       dispatch(createNotification({ type: "success", message }, 5000));
     } catch (error) {
       dispatch(
-        createNotification({
-          type: "error",
-          message: error.message,
-        }, 5000)
+        createNotification(
+          {
+            type: "error",
+            message: error.message,
+          },
+          5000
+        )
       );
     }
   };
@@ -43,10 +53,13 @@ const BlogView = () => {
       dispatch(createNotification({ type: "success", message }, 5000));
     } catch (error) {
       dispatch(
-        createNotification({
-          type: "error",
-          message: error.message,
-        }, 5000)
+        createNotification(
+          {
+            type: "error",
+            message: error.message,
+          },
+          5000
+        )
       );
     }
   };
@@ -58,9 +71,15 @@ const BlogView = () => {
         <a href={blog.url}>{blog.url}</a>
       </p>
       <p>
-        {blog.likes} <button onClick={handleLike}>Like</button>
+        {blog.likes}{" "}
+        <Button onClick={handleLike} startIcon={<ThumbUp />}>
+          Like
+        </Button>
       </p>
-      <p>Added by {blog.author}</p>
+      <p>Added by {blog.user.username}</p>
+      <Button variant="outlined" color="error" onClick={handleDelete}>
+        Delete
+      </Button>
       <Comments comments={blog.comments} addComment={addComment} />
     </div>
   );

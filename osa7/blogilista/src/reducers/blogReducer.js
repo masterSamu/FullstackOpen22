@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogServices from "../services/blogs";
+import { createNotification } from "./notificationReducer";
 
 const blogSlice = createSlice({
   name: "blogs",
@@ -45,10 +46,41 @@ export const createBlog = (blogObject) => {
   };
 };
 
-export const removeBlog = (id) => {
+export const removeBlog = (blog) => {
   return async (dispatch) => {
-    const deleted = await blogServices.deleteItem(id);
-    if (deleted === "deleted") dispatch(removeBlogReducer(id));
+    try {
+      const id = blog.id;
+      const response = await blogServices.deleteItem(id);
+      if (response === "deleted") {
+        dispatch(removeBlogReducer(id));
+        dispatch(
+          createNotification(
+            {
+              type: "success",
+              message: `${blog.title} from ${blog.author} deleted successfully`,
+            },
+            5000
+          )
+        );
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        dispatch(
+          createNotification(
+            {
+              type: "error",
+              message:
+                "Unauthorized user to delete this blog. Only creator can delete blog.",
+            },
+            5000
+          )
+        );
+      } else {
+        dispatch(
+          createNotification({ type: "error", message: error.message }, 5000)
+        );
+      }
+    }
   };
 };
 
@@ -60,11 +92,10 @@ export const updateBlog = (id, blog) => {
 };
 
 export const addCommentToBlog = (id, comment) => {
-  return async dispatch => {
+  return async (dispatch) => {
     const commentedBlog = await blogServices.commentBlog(id, comment);
     if (commentedBlog) dispatch(setBlogReducer(commentedBlog));
-  }
-}
-
+  };
+};
 
 export default blogSlice.reducer;
