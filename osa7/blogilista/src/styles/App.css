@@ -1,0 +1,31 @@
+.error,
+.success {
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 10px;
+  background-color: darkgrey;
+  font-size: 1.5rem;
+  padding: 1em;
+}
+
+.error {
+  color: red;
+  border-color: red;
+}
+
+.success {
+  color: green;
+  border-color: green;
+}
+
+form {
+  margin: 10px 0px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 10px;
+}
+
+button[type="submit"] {
+  align-self: center;
+}
